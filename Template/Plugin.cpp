@@ -21,7 +21,8 @@ class FishingCommand : public Command {
     enum FishingCommandOP : int
     {
         start = 1,
-        stop = 2
+        stop = 2,
+        help = 3
 
     } op;
     std::string message;
@@ -45,6 +46,11 @@ public:
             }
             Level::broadcastText("§e钓鱼节结束了！", TextType::RAW);
             break;
+        case FishingCommand::help:
+        {
+			output.success("/fishing start - 开始钓鱼节");
+			output.success("/fishing stop - 结束钓鱼节");
+        }
         default:
             break;
         }
@@ -54,7 +60,7 @@ public:
         using RegisterCommandHelper::makeMandatory;
         using RegisterCommandHelper::makeOptional;
         registry->registerCommand("fishing", "钓鱼节", CommandPermissionLevel::GameMasters, { (CommandFlagValue)0 }, { (CommandFlagValue)0x80 });
-        registry->addEnum<FishingCommandOP>("fishingOP", { {"off", FishingCommandOP::stop} ,{"on", FishingCommandOP::start} });
+        registry->addEnum<FishingCommandOP>("fishingOP", { {"off", FishingCommandOP::stop} ,{"on", FishingCommandOP::start}, {"help", FishingCommandOP::help} });
         registry->registerOverload<FishingCommand>("fishing", makeMandatory<CommandParameterDataType::ENUM>(&FishingCommand::op, "optional", "fishingOP"));
     }
 };
